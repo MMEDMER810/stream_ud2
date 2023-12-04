@@ -144,7 +144,10 @@ class TestExamenStream {
             List<Oficina> list = oficinaHome.findAll();
 
             //TODO STREAMS
-            var solList = list.stream();
+            var solList = list.stream()
+                    .filter(oficina -> oficina.getPais().equalsIgnoreCase("España"))
+                    .sorted(comparing(Oficina::getCiudad).reversed())
+                    .map (oficina -> "Ciudad: " + oficina.getCiudad() + " Tel: "+ oficina.getTelefono());
 
             solList.forEach(System.out::println);
 
@@ -172,7 +175,9 @@ class TestExamenStream {
             List<Empleado> list = empleadoHome.findAll();
 
             //TODO STREAMS
-            var solList = list.stream();
+            var solList = list.stream()
+                            .filter(empleado -> empleado.getJefe() != null && empleado.getJefe().getCodigoEmpleado() == 7)
+                            .map(empleado1 -> "Nombre: " + empleado1.getNombre() + " Apellidos: "+ empleado1.getApellido1() +" "+ empleado1.getApellido2() + " Email: " +empleado1.getEmail());
 
             solList.forEach(System.out::println);
 
@@ -200,7 +205,11 @@ class TestExamenStream {
             List<Cliente> list = clienteHome.findAll();
 
             //TODO STREAMS
-            var solList = list.stream();
+            var solList = list.stream()
+                    .sorted(comparing(Cliente::getNombreCliente))
+                            .map(cliente -> "\nNombre cliente: " + cliente.getNombreCliente() +
+                                    "\nNombre y apellido representante de ventas: " + cliente.getRepresentanteVentas().getNombre() + " "+cliente.getRepresentanteVentas().getApellido1());
+
 
             solList.forEach(System.out::println);
 
@@ -214,7 +223,8 @@ class TestExamenStream {
 
     /**
      * TEST4
-     * Devuelve un listado de todos los pedidos que fueron rechazados en 2009 ordenados por fecha descendiente. Mostrando la información de fecha de pedido en formato yyyy-MM-dd, nombre de cliente
+     * Devuelve un listado de todos los pedidos que fueron rechazados en 2009 ordenados por fecha descendiente.
+     * Mostrando la información de fecha de pedido en formato yyyy-MM-dd, nombre de cliente
      * estado, representante de ventas, estado.
      */
     @Test
@@ -238,7 +248,13 @@ class TestExamenStream {
             }
 
             //TODO STREAMS
-            var solList = list.stream();
+            var solList = list.stream()
+                            .filter(p -> p.getEstado().equalsIgnoreCase("rechazado") && p.getFechaPedido().toString().contains("2009"))
+                                    .sorted(comparing(Pedido::getFechaPedido).reversed())
+                                            .map (pedido -> "Fecha pedido: " + pedido.getFechaPedido()
+                                            + "; Nombre cliente: " + pedido.getCliente().getNombreCliente()
+                                                    + "; Nombre representante: " + pedido.getCliente().getRepresentanteVentas().getNombre()
+                                            + "; Estado: "+pedido.getEstado());
 
             solList.forEach(System.out::println);
 
@@ -264,7 +280,10 @@ class TestExamenStream {
             List<Cliente> list = clienteHome.findAll();
 
             //TODO STREAMS
-            var solList = list.stream();
+            var solList = list.stream()
+                            .filter(cliente -> !cliente.getPais().equalsIgnoreCase("Spain"))
+                                    .sorted(comparing(Cliente::getNombreCliente))
+                                            .map(Cliente::getNombreCliente);
 
             solList.forEach(System.out::println);
 
@@ -291,7 +310,10 @@ class TestExamenStream {
             List<Oficina> list = oficinaHome.findAll();
 
             //TODO STREAMS
-            var solList = list.stream();
+            var solList = list.stream()
+                    .filter(cliente -> cliente.getCiudad().equalsIgnoreCase("Fuenlabrada"))
+                            .map(oficina -> oficina.getLineaDireccion1() + " " + oficina.getLineaDireccion2());
+
 
             solList.forEach(System.out::println);
 
